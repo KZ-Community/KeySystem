@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NOOB HUB - Get Licence Key</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0f1928;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .container {
+            background-color: #1f2b3e;
+            border-radius: 14px;
+            width: 90%;
+            max-width: 500px;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0, 170, 255, 0.2);
+            border: 2px solid rgba(0, 170, 255, 0.4);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #00aaff;
+            margin-bottom: 30px;
+        }
+        
+        .step {
+            background-color: #2a3a52;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+        
+        .step-number {
+            background-color: #00aaff;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        
+        .ad-container {
+            background-color: #1a2436;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            text-align: center;
+        }
+        
+        .ad-container iframe {
+            width: 100%;
+            height: 250px;
+            border: none;
+            border-radius: 5px;
+        }
+        
+        .btn {
+            background-color: #00aaff;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 16px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #0088cc;
+        }
+        
+        .key-display {
+            background-color: #2a3a52;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 18px;
+            margin: 20px 0;
+            word-break: break-all;
+            display: none;
+        }
+        
+        .copy-btn {
+            background-color: #3a4a62;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        .timer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #aaaaaa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>GET YOUR LICENCE KEY</h1>
+        
+        <div class="step">
+            <span class="step-number">1</span>
+            <span>Complete all 3 advertisement steps to get your key</span>
+        </div>
+        
+        <div id="step1" class="step">
+            <span class="step-number">2</span>
+            <span>Watch the advertisement for 30 seconds</span>
+            
+            <div class="ad-container">
+                <!-- โฆษณาจาก loot.link หรือเครือข่ายโฆษณาอื่นๆ -->
+                <iframe id="adFrame1" src="https://loot.link/your-ad-link-1" frameborder="0"></iframe>
+            </div>
+            
+            <button id="completeBtn1" class="btn" disabled>Please wait... <span id="timer1">30</span>s</button>
+        </div>
+        
+        <div id="step2" class="step" style="display: none;">
+            <span class="step-number">3</span>
+            <span>Click on the advertisement link</span>
+            
+            <div class="ad-container">
+                <iframe id="adFrame2" src="https://loot.link/your-ad-link-2" frameborder="0"></iframe>
+            </div>
+            
+            <button id="completeBtn2" class="btn">Click to proceed</button>
+        </div>
+        
+        <div id="step3" class="step" style="display: none;">
+            <span class="step-number">4</span>
+            <span>Complete the final verification</span>
+            
+            <div class="ad-container">
+                <iframe id="adFrame3" src="https://loot.link/your-ad-link-3" frameborder="0"></iframe>
+            </div>
+            
+            <button id="completeBtn3" class="btn">Verify</button>
+        </div>
+        
+        <div id="keyResult" class="key-display">
+            <div>Your Licence Key:</div>
+            <div id="generatedKey" style="font-weight: bold; margin: 10px 0;"></div>
+            <button id="copyKeyBtn" class="copy-btn">Copy Key</button>
+            <div class="timer">This key will expire in <span id="expiryTimer">24:00:00</span></div>
+        </div>
+    </div>
+
+    <script>
+        // ตัวแปรสำหรับ tracking การเสร็จสิ้นแต่ละขั้นตอน
+        let step1Completed = false;
+        let step2Completed = false;
+        let step3Completed = false;
+        
+        // ตัวนับเวลาสำหรับโฆษณาขั้นตอนแรก
+        let timer1 = 30;
+        const timerElement = document.getElementById('timer1');
+        const completeBtn1 = document.getElementById('completeBtn1');
+        
+        // เริ่มนับถอยหลังสำหรับโฆษณาขั้นตอนแรก
+        const countdown = setInterval(() => {
+            timer1--;
+            timerElement.textContent = timer1;
+            
+            if (timer1 <= 0) {
+                clearInterval(countdown);
+                completeBtn1.textContent = "Complete Step 1";
+                completeBtn1.disabled = false;
+            }
+        }, 1000);
+        
+        // เมื่อผู้ใช้เสร็จสิ้นขั้นตอนที่ 1
+        completeBtn1.addEventListener('click', () => {
+            step1Completed = true;
+            document.getElementById('step1').style.display = 'none';
+            document.getElementById('step2').style.display = 'block';
+            
+            // Track completion with your analytics or ad network
+            trackStepCompletion(1);
+        });
+        
+        // เมื่อผู้ใช้เสร็จสิ้นขั้นตอนที่ 2
+        document.getElementById('completeBtn2').addEventListener('click', () => {
+            step2Completed = true;
+            document.getElementById('step2').style.display = 'none';
+            document.getElementById('step3').style.display = 'block';
+            
+            // Track completion with your analytics or ad network
+            trackStepCompletion(2);
+        });
+        
+        // เมื่อผู้ใช้เสร็จสิ้นขั้นตอนที่ 3
+        document.getElementById('completeBtn3').addEventListener('click', () => {
+            step3Completed = true;
+            document.getElementById('step3').style.display = 'none';
+            
+            // สร้างคีย์และแสดงผล
+            generateAndDisplayKey();
+            
+            // Track completion with your analytics or ad network
+            trackStepCompletion(3);
+        });
+        
+        // ฟังก์ชันสร้างคีย์และแสดงผล
+        function generateAndDisplayKey() {
+            const keyElement = document.getElementById('generatedKey');
+            const keyDisplay = document.getElementById('keyResult');
+            
+            // สร้างคีย์แบบสุ่ม (ในทางปฏิบัติควรสร้างจากเซิร์ฟเวอร์เพื่อความปลอดภัย)
+            const randomKey = generateRandomKey();
+            keyElement.textContent = randomKey;
+            keyDisplay.style.display = 'block';
+            
+            // ตั้งเวลาหมดอายุ 24 ชั่วโมง
+            startExpiryTimer();
+            
+            // บันทึกคีย์ใน localStorage (หรือควรส่งไปยังเซิร์ฟเวอร์ของคุณ)
+            localStorage.setItem('lastGeneratedKey', randomKey);
+            localStorage.setItem('keyExpiry', Date.now() + 24 * 60 * 60 * 1000);
+        }
+        
+        // ฟังก์ชันสร้างคีย์แบบสุ่ม
+        function generateRandomKey() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let result = '';
+            for (let i = 0; i < 10; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return result;
+        }
+        
+        // ตัวนับเวลาหมดอายุ
+        function startExpiryTimer() {
+            const expiryElement = document.getElementById('expiryTimer');
+            let hours = 24;
+            let minutes = 0;
+            let seconds = 0;
+            
+            const timer = setInterval(() => {
+                seconds--;
+                if (seconds < 0) {
+                    seconds = 59;
+                    minutes--;
+                    if (minutes < 0) {
+                        minutes = 59;
+                        hours--;
+                        if (hours < 0) {
+                            clearInterval(timer);
+                            expiryElement.textContent = "EXPIRED";
+                            return;
+                        }
+                    }
+                }
+                
+                const timeString = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                expiryElement.textContent = timeString;
+            }, 1000);
+        }
+        
+        // ฟังก์ชันคัดลอกคีย์
+        document.getElementById('copyKeyBtn').addEventListener('click', () => {
+            const keyText = document.getElementById('generatedKey').textContent;
+            navigator.clipboard.writeText(keyText).then(() => {
+                alert('Key copied to clipboard!');
+            });
+        });
+        
+        // ฟังก์ชันติดตามการเสร็จสิ้นขั้นตอน (ควรเชื่อมต่อกับระบบของคุณ)
+        function trackStepCompletion(step) {
+            console.log(`Step ${step} completed`);
+            // ในทางปฏิบัติ: ส่งข้อมูลไปยังเซิร์ฟเวอร์หรือเครือข่ายโฆษณาของคุณ
+        }
+    </script>
+</body>
+</html>
